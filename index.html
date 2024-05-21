@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+            text-align: center;
+            background-color:  #000022; /* Blue-black background */
+            color: #8a2be2; /* Blue-violet text */
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #result {
+            margin-top: 20px;
+            color: #8a2be2; /* Blue-violet text */
+        }
+
+        #triesLeft {
+            color: #8a2be2; /* Blue-violet text */
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1><strong>Number Guessing Game</strong></h1>
+        <h3>a website by <a href=https://rileeyyy.github.io>riley</a></h3>
+        <h4><strong>Guess a number between 1 and 200:</strong></h4>
+        <br>
+        <input type="text" id="guessInput" class="form-control">
+        <button onclick="checkGuess()" class="btn btn-primary">Guess</button>
+         <br>
+        <br>
+        <br>
+        <strong><h3 id="result"></h3></strong>
+        <strong><h3 id="triesLeft">Tries left: 15</h3></strong>
+    </div>
+
+    <script>
+        let tries = 15;
+        const randomNumber = Math.floor(Math.random() * 200) + 1;
+
+        function updateTries() {
+            document.getElementById('triesLeft').textContent = `Tries left: ${tries}`;
+        }
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guessInput').value);
+            const resultElement = document.getElementById('result');
+
+            if (isNaN(guess) || guess < 1 || guess > 200) {
+                resultElement.textContent = 'Please enter a valid number between 1 and 200.';
+            } else {
+                tries--;
+                updateTries();
+
+                if (tries === 0) {
+                    resultElement.textContent = 'You Lose!';
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+                } else if (guess === randomNumber) {
+                    resultElement.textContent = 'Congratulations! You guessed the correct number!';
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+                } else if (guess < randomNumber) {
+                    resultElement.textContent = 'Too low! Try again.';
+                } else {
+                    resultElement.textContent = 'Too high! Try again.';
+                }
+            }
+        }
+
+        // Event listener for Enter key
+        document.getElementById('guessInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+        updateTries();
+    </script>
+</body>
+
+</html>
