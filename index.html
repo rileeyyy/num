@@ -11,8 +11,8 @@
         body {
             font-family: Helvetica, sans-serif;
             text-align: center;
-            background-color:  #000022; /* Blue-black background */
-            color: #8a2be2; /* Blue-violet text */
+            background-color: #000022;
+            color: #8a2be2;
         }
 
         .container {
@@ -21,11 +21,16 @@
 
         #result {
             margin-top: 20px;
-            color: #8a2be2; /* Blue-violet text */
+            color: #8a2be2;
         }
 
         #triesLeft {
-            color: #8a2be2; /* Blue-violet text */
+            color: #8a2be2;
+        }
+
+        #highScore {
+            color: #8a2be2;
+            margin-top: 20px;
         }
 
         button {
@@ -37,24 +42,31 @@
 <body>
     <div class="container">
         <h1><strong>Number Guessing Game</strong></h1>
-        <h3>a website by <a href=https://rileeyyy.github.io>riley</a></h3>
+        <h3>a website by <a href="https://rileeyyy.github.io">riley</a></h3>
         <h4><strong>Guess a number between 1 and 200:</strong></h4>
         <br>
         <input type="text" id="guessInput" class="form-control">
         <button onclick="checkGuess()" class="btn btn-primary">Guess</button>
-         <br>
+        <br>
         <br>
         <br>
         <strong><h3 id="result"></h3></strong>
         <strong><h3 id="triesLeft">Tries left: 15</h3></strong>
+        <strong><h3 id="highScore">High Score: 0</h3></strong>
     </div>
 
     <script>
-        let tries = 15;
+        const totalTries = 15;
+        let tries = totalTries;
         const randomNumber = Math.floor(Math.random() * 200) + 1;
+        let highScore = localStorage.getItem('highScore') || 0;
 
         function updateTries() {
             document.getElementById('triesLeft').textContent = `Tries left: ${tries}`;
+        }
+
+        function updateHighScore() {
+            document.getElementById('highScore').textContent = `High Score: ${highScore}`;
         }
 
         function checkGuess() {
@@ -73,7 +85,13 @@
                         location.reload();
                     }, 5000);
                 } else if (guess === randomNumber) {
-                    resultElement.textContent = 'Congratulations! You guessed the correct number!';
+                    const triesUsed = totalTries - tries;
+                    resultElement.textContent = `Congratulations! You guessed the correct number in ${triesUsed} tries!`;
+                    if (triesUsed < highScore || highScore === 0) {
+                        highScore = triesUsed;
+                        localStorage.setItem('highScore', highScore);
+                        updateHighScore();
+                    }
                     setTimeout(function () {
                         location.reload();
                     }, 5000);
@@ -93,7 +111,9 @@
         });
 
         updateTries();
+        updateHighScore();
     </script>
 </body>
 
 </html>
+
